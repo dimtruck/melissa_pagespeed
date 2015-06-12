@@ -1,0 +1,79 @@
+<head>
+  <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet" id="bootstrap-css">
+  <title>Page speed fun!</title>
+  <style type="text/css">
+* {
+  .border-radius(0) !important;
+}
+
+#url {
+    margin-bottom:20px;
+}
+  </style>
+</head>
+<body>
+  <div class="container">
+	<div class="row"><% results %><% title %>
+		<input type="hidden" name="count" value="1" />
+        <div class="control-group" id="urls">
+            <label class="control-label" for="url1">Nice Multiple Form Fields</label>
+            <div class="controls" id="profs"> 
+                <form class="input-append" method="POST">
+                    <div id="url"><input autocomplete="off" class="input" id="url1" name="url1" type="text" placeholder="google.com" data-items="8"/><button id="b1" class="btn add-more" type="button">+</button></div>
+<button id="button" type="submit" class="btn btn-success">
+                <i class="icon-circle-arrow-right icon-large"></i> Submit all the things
+            </button>
+                </form>
+            <br>
+            </div>
+        </div>
+	</div>
+  </div>
+  <script type="text/javascript" src="/javascripts/jquery.min.js"></script>
+  <script type="text/javascript" src="/javascripts/bootstrap.min.js"></script>
+  <script type="text/javascript">
+$(document).ready(function(){
+    var next = 1;
+    $(".add-more").click(function(e){
+        e.preventDefault();
+        var addto = "#url" + next;
+        var addRemove = "#url" + (next);
+        next = next + 1;
+        var newIn = '<input autocomplete="off" class="input form-control" id="url' + next + '" name="url' + next + '" type="text">';
+        var newInput = $(newIn);
+        var removeBtn = '<button id="remove' + (next - 1) + '" class="btn btn-danger remove-me" >-</button></div><div id="url">';
+        var removeButton = $(removeBtn);
+        $(addto).after(newInput);
+        $(addRemove).after(removeButton);
+        $("#url" + next).attr('data-source',$(addto).attr('data-source'));
+        $("#count").val(next);  
+        
+            $('.remove-me').click(function(e){
+                e.preventDefault();
+                var urlNum = this.id.charAt(this.id.length-1);
+                var urlID = "#url" + urlNum;
+                $(this).remove();
+                $(urlID).remove();
+            });
+    });
+$("button#submit").click(function(){
+	        $.ajax({
+    	type: "POST",
+	url: "process.php",
+	data: $('form.contact').serialize(),
+        	success: function(msg){
+                 $("#thanks").html(msg)
+        $("#form-content").modal('hide');	
+         },
+	error: function(){
+	alert("failure");
+	}
+      	});
+	});    
+
+    
+});
+
+  </script>
+</body>
+
